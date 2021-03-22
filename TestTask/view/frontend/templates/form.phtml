@@ -1,0 +1,38 @@
+<?php
+/** @var $block Template */
+
+/** @var $escaper Escaper */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Pereviazko\TestTask\ViewModel\CustomerInfo;
+
+/** @var CustomerInfo $viewModel */
+$viewModel = $block->getData('viewModel');
+
+?>
+<form action="<?= $escaper->escapeUrl($block->getUrl('testtask/index/save')) ?>"
+      method="post"
+      data-mage-init='{"validation": {}}'>
+    <div class="field customer_status">
+        <label class="label" for="customer_status">
+            <span><?= /* @noEscape */ $escaper->escapeHtml(__('Customer Status')) ?></span>
+        </label>
+        <div class="control">
+            <input type="text"
+                   name="customer_status"
+                   value="<?= $viewModel->getCustomerStatus() ?>"
+                   title="customer_status"
+                   id="customer_status"
+                   data-validate='{"required":true}'
+            />
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit" class="action" name="save" id="save">
+                    <span data-bind="i18n: 'Save'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
