@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Pereviazko\TestTask\ViewModel;
 
@@ -8,33 +9,26 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Pereviazko\TestTask\Api\GetCustomerStatusInterface;
 use Pereviazko\TestTask\Api\SaveCustomerStatusInterface;
 
 class CustomerInfo implements ArgumentInterface
 {
     /**
-     * @var CustomerRepositoryInterface
+     * @var GetCustomerStatusInterface
      */
-    private $customerRepository;
+    private $getCustomerStatus;
 
     /**
-     * @var CurrentCustomer
-     */
-    private $currentCustomer;
-
-    /**
-     * ViewModel constructor
+     * CustomerInfo constructor
      *
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param CurrentCustomer $currentCustomer
+     * @param GetCustomerStatusInterface $getCustomerStatus
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRepository,
-        CurrentCustomer $currentCustomer
+        GetCustomerStatusInterface $getCustomerStatus
     )
     {
-        $this->customerRepository = $customerRepository;
-        $this->currentCustomer = $currentCustomer;
+        $this->getCustomerStatus = $getCustomerStatus;
     }
 
     /**
@@ -42,19 +36,6 @@ class CustomerInfo implements ArgumentInterface
      */
     public function getCustomerStatus(): ?string
     {
-        $customerId = $this->currentCustomer->getCustomerId();
-        /** @var Customer $customer */
-        try {
-            $customer = $this->customerRepository->getById($customerId);
-        } catch (NoSuchEntityException $e) {
-            return '';
-        } catch (LocalizedException $e) {
-            return '';
-        }
-        $customAttribute = $customer->getCustomAttribute(
-            SaveCustomerStatusInterface::CUSTOMER_STATUS_ATTRIBUTE
-        );
-
-        return $customAttribute !== null ? $customAttribute->getValue() : null;
+        return $this->getCustomerStatus->execute();
     }
 }

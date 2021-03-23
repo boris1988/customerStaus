@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Pereviazko\TestTask\Controller\Index;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
