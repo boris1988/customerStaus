@@ -71,15 +71,15 @@ class StatusCustomerAttribute implements DataPatchInterface, PatchRevertableInte
         );
 
         $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, self::ATTRIBUTE_NAME)
-            ->addData([
-            'used_in_forms' => [
+            ->setData(
+                'used_in_forms', [
                 'adminhtml_customer',
                 'customer_account_create',
                 'customer_account_edit'
-            ]
-        ]);
-
-        $this->attributeRepository->save($attribute);
+            ]);
+        $attribute->save();
+        //using repository used_in_forms not saving
+       // $this->attributeRepository->save($attribute);
         $this->moduleDataSetup->getConnection()->endSetup();
 
         return $this;
